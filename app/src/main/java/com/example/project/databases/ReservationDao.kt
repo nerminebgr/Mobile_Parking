@@ -1,0 +1,33 @@
+package com.example.project.databases
+
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.Query
+import androidx.room.Update
+import com.example.project.databases.entities.Reservation
+import java.util.Date
+
+@Dao
+interface ReservationDao {
+    @Query("select * from reservations where userId= :userId")
+    fun getUserReservations(userId:Int):List<Reservation>
+
+    @Query("select * from reservations ")
+    fun getAllReservations():List<Reservation>
+
+
+    @Query("SELECT * FROM reservations WHERE id = :id")
+    fun getReservationById(id: Int): Reservation
+
+    @Query("delete from reservations")
+    fun deleteReservations()
+
+    @Query("select * from reservations where date = :date")
+    fun getReservationByDate(date:Date):List<Reservation>
+    @Insert
+    fun addReservation(vararg reservation: Reservation)
+    @Update
+    fun updateParking(reservation: Reservation)
+
+
+}
