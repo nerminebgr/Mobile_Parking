@@ -11,7 +11,7 @@ import java.util.Date
             parentColumns=["id"],childColumns = ["userId"],
             onUpdate = ForeignKey.CASCADE,
             onDelete = ForeignKey.CASCADE ),
-        ForeignKey(entity= ParkingE::class,
+        ForeignKey(entity= Parking::class,
             parentColumns=["id"],childColumns = ["parkingId"],
             onUpdate = ForeignKey.CASCADE,
             onDelete = ForeignKey.CASCADE ),

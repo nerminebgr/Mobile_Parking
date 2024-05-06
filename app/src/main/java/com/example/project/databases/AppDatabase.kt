@@ -5,11 +5,11 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.example.project.databases.entities.ParkingE
+import com.example.project.databases.entities.Parking
 import com.example.project.databases.entities.Reservation
 import com.example.project.databases.entities.User
 
-@Database(entities = [Reservation::class, User::class, ParkingE::class], version = 1)
+@Database(entities = [Reservation::class, User::class, Parking::class], version = 1)
 @TypeConverters(Converters::class)
 abstract class AppDatabase: RoomDatabase() {
     abstract fun getUserDao(): UserDao

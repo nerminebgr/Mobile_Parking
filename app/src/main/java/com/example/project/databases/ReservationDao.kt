@@ -15,6 +15,10 @@ interface ReservationDao {
     @Query("select * from reservations ")
     fun getAllReservations():List<Reservation>
 
+    @Query("select count(*) from reservations")
+    fun count(): Int
+
+
 
     @Query("SELECT * FROM reservations WHERE id = :id")
     fun getReservationById(id: Int): Reservation

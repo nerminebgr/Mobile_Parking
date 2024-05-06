@@ -75,4 +75,15 @@ dependencies {
     implementation ("androidx.room:room-ktx:$room_version")
     testImplementation ("androidx.room:room-testing:$room_version")
 
+    //Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.6.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.6.0")
+    implementation ("com.google.code.gson:gson:2.8.5")
+    // Coil
+    implementation("io.coil-kt:coil-compose:2.4.0")
+    //Coroutine tests
+    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.4.2")
+    //MockWebserver
+    testImplementation ("com.squareup.okhttp3:mockwebserver:4.9.1")
+
 }

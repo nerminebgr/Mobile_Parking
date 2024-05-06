@@ -1,5 +1,6 @@
 package com.example.project
 
+import SplashScreen
 import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -27,16 +28,18 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+
 import com.example.project.databases.AppDatabase
 import com.example.project.databases.ParkingDao
 import com.example.project.databases.ReservationDao
 import com.example.project.databases.UserDao
-import com.example.project.databases.entities.ParkingE
+import com.example.project.databases.entities.Parking
 import com.example.project.databases.entities.User
 import com.example.project.interfaces.DestinationPath
 import com.example.project.interfaces.DisplayHome
 import com.example.project.interfaces.DisplayReservations
-import com.example.project.interfaces.Parking
+import com.example.project.interfaces.DisplaySignIn
+import com.example.project.interfaces.DisplaySignUP
 import com.example.project.interfaces.auth
 import com.example.project.interfaces.getData
 import com.example.project.models.ParkingModel
@@ -74,10 +77,10 @@ class MainActivity : ComponentActivity() {
                     //auth()
                     //DisplayParkingsList(getData())
                     val context = LocalContext.current
-                    val db = AppDatabase.getInstance(context)
-                    val reservationDao = db.getReservationDao()
-                    val userDao = db.getUserDao()
-                    val parkingDao=db.getParkingDao()
+                    //val db = AppDatabase.getInstance(context)
+                    //val reservationDao = db.getReservationDao()
+                    //val userDao = db.getUserDao()
+                    //val parkingDao=db.getParkingDao()
 
                     //addData(parkingDao,userDao)
 
@@ -94,6 +97,8 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun BottomNavScreen(navController: NavHostController, reservationModel: ResevationModel,parkingModel: ParkingModel,userModel: UserModel) {
     val currentRoute = currentRoute(navController)
+    val context = LocalContext.current
+    val isLoggedIn = true
     Scaffold(
         bottomBar = {
             BottomAppBar {
@@ -107,8 +112,8 @@ fun BottomNavScreen(navController: NavHostController, reservationModel: Resevati
                     NavigationBarItem(
                         icon = { Icon(Icons.Default.AccountCircle, contentDescription = "Login") },
                         label = { Text("Login") },
-                        selected = currentRoute == DestinationPath.Authentication.route,
-                        onClick = { navController.navigate(DestinationPath.Authentication.route) }
+                        selected = currentRoute == DestinationPath.SignIn.route,
+                        onClick = { navController.navigate(DestinationPath.SignIn.route) }
                     )
                     NavigationBarItem(
                         icon = { Icon(Icons.Default.List, contentDescription = "Reservations") },
@@ -116,15 +121,25 @@ fun BottomNavScreen(navController: NavHostController, reservationModel: Resevati
                         selected = currentRoute == DestinationPath.Reservations.route,
                         onClick = { navController.navigate(DestinationPath.Reservations.route) }
                     )
+
                 }
             }
         },
 
         ) {
-            NavHost(navController = navController, startDestination = DestinationPath.Home.route) {
+            NavHost(navController = navController, startDestination = DestinationPath.Splash.route) {
                 composable(DestinationPath.Home.route) { DisplayHome(navController = navController,reservationModel,parkingModel, userModel) }
-                composable(DestinationPath.Authentication.route) { auth(navController = navController) }
-                composable(DestinationPath.Reservations.route) { DisplayReservations(navController = navController,reservationModel,parkingModel, userModel) }
+                composable(DestinationPath.SignIn.route) { DisplaySignIn(navController = navController) }
+                composable(DestinationPath.SignUp.route) { DisplaySignUP(navController) }
+                composable(DestinationPath.Splash.route) { SplashScreen(navController)}
+                composable(DestinationPath.Reservations.route) {
+                    if (isLoggedIn) {
+                        DisplayReservations(navController = navController,reservationModel,parkingModel, userModel)
+                    }
+                    else {
+                        DisplaySignIn(navController)
+                    }
+                }
             }
         }
 
@@ -137,6 +152,7 @@ fun currentRoute(navController: NavHostController): String? {
     return navBackStackEntry?.destination?.route
 }
 
+/*
 @SuppressLint("CoroutineCreationDuringComposition")
 fun addData(parkingModel: ParkingModel, userModel: UserModel){
     val parkinglist:List<Parking> = getData()
@@ -161,4 +177,4 @@ fun addData(parkingModel: ParkingModel, userModel: UserModel){
         }
 
     }
-}
+}*/
