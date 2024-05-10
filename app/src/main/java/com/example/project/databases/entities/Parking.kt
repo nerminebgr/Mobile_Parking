@@ -9,7 +9,7 @@ data class Parking(
     var id: Int=0,
     val nom: String,
     val commune: String,
-    val photo: String,
+    val image: String,
     val description: String,
     val adresse: String,
     val prix: String,

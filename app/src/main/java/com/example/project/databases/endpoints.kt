@@ -13,7 +13,7 @@ import retrofit2.http.Path
 
 interface Endpoint {
 
-    @GET("parkings/all/")
+    @GET("parkings/")
     suspend fun getAllParkings(): Response<List<Parking>>
 
     @GET("reservations/{userId}/")

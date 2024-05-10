@@ -111,7 +111,7 @@ fun DisplayHome(navController: NavHostController, reservationModel: ResevationMo
                             .padding(10.dp)
 
                     ) {
-                        AsyncImage(model = URL +it.photo,
+                        AsyncImage(model = URL +it.image,
                             contentDescription = null,
                             contentScale = ContentScale.Crop,
                             modifier = Modifier
