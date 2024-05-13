@@ -18,6 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -48,7 +49,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun DisplayReservations(navController: NavHostController, reservationModel: ResevationModel, parkingModel: ParkingModel, userModel: UserModel) {
 
-    var user = User(firstName = "test", lastName = "test")
+    var user = userModel.authUser.value
 
     val loading = remember {
         mutableStateOf(true)
@@ -66,16 +67,11 @@ fun DisplayReservations(navController: NavHostController, reservationModel: Rese
         )
 
 
-    CoroutineScope(Dispatchers.IO).launch {
-
-
-        userModel.getUsersByFirstName("firstName")
-        user = userModel.users.value[0]
-
-        reservationModel.getAllUserReservations(user.id)
-
+    LaunchedEffect(Unit) {
+        if (user != null) reservationModel.getAllUserReservations(user.id)
         loading.value = false
     }
+
 
 
     if (loading.value) {
@@ -108,24 +104,15 @@ fun DisplayReservations(navController: NavHostController, reservationModel: Rese
                     .padding(start = 30.dp),
                 fontWeight = FontWeight.ExtraBold
             )
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text(text = "Réservations")
-                Button(
-                    onClick = {
-
-                        //authmanager.clearCredentials(context)
-                        //redirection vers la page de Home
-                        navController.navigate(DestinationPath.Home.route)
-
-                    }
-                ) {
-                    Text(text = "Déconnexion")
+            Button(
+                onClick = {
+                    if (user!=null) userModel.logout(user)
+                    navController.navigate(DestinationPath.Home.route)
                 }
+            ) {
+                Text(text = "Logout")
             }
+
 
         }
         Row(
@@ -179,7 +166,7 @@ fun DisplayReservations(navController: NavHostController, reservationModel: Rese
                             .padding(10.dp)
                     ){
 
-                        Text(text = "Date = ${it.date}")
+                        Text(text = "Date = ${it.date_entree}")
                     }
                     Spacer(modifier = Modifier.height(15.dp))
                     Row(

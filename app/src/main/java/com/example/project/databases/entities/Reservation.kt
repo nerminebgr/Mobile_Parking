@@ -8,7 +8,7 @@ import java.util.Date
 @Entity(tableName = "reservations"
     , foreignKeys = [
         ForeignKey(entity= User::class,
-            parentColumns=["id"],childColumns = ["userId"],
+            parentColumns=["id"],childColumns = ["conducteurId"],
             onUpdate = ForeignKey.CASCADE,
             onDelete = ForeignKey.CASCADE ),
         ForeignKey(entity= Parking::class,
@@ -19,8 +19,10 @@ import java.util.Date
 data class Reservation (
     @PrimaryKey(autoGenerate = true)
     val id:Int=0,
-    var userId:Int,
+    var conducteurId:Int,
     var parkingId:Int,
-    val date: Date
+    var date_entree: Date,
 )
+
+
 

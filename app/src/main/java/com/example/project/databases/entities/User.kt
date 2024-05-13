@@ -7,7 +7,9 @@ import androidx.room.PrimaryKey
 data class User (
     @PrimaryKey(autoGenerate = true)
     val id:Int=0,
-    var firstName:String,
-    var lastName:String
+    var email:String,
+    var password:String,
+    var firstname:String,
+    var lastname:String
 )
 

@@ -16,7 +16,10 @@ import java.util.Date
 
 class ResevationModel (private val reservationRepository: ReservationRepository): ViewModel() {
 
+    var loading = mutableStateOf(false)
+    var error = mutableStateOf(false)
     var allUserReservations = mutableStateOf(listOf<Reservation>())
+
 
     /*fun getAllUserReservations(userID:Int) {
         viewModelScope.launch {
@@ -26,17 +29,12 @@ class ResevationModel (private val reservationRepository: ReservationRepository)
         }
     }*/
 
-    var loading = mutableStateOf(false)
-    var error = mutableStateOf(false)
 
     fun getAllUserReservations(userID:Int){
         CoroutineScope(Dispatchers.IO).launch {
-            val count = reservationRepository.count()
-            if (count == 0) {
+
                 getAllReservationsRemote(userID)
-            } else {
-                getAllReservationsLocal(userID)
-            }
+
         }
     }
     fun getAllReservationsLocal(userID:Int){
@@ -72,11 +70,34 @@ class ResevationModel (private val reservationRepository: ReservationRepository)
     }
 
     fun addReservation(reservation: Reservation) {
+        loading.value = true
+        error.value = false
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                reservationRepository.addReservation(reservation)
+
+                val response = reservationRepository.addReservation(reservation)
+                loading.value = false
+
+                if(response.isSuccessful){
+                    val responseBody  = response.body()
+                    if(responseBody !=null){
+                        CoroutineScope(Dispatchers.IO).launch {
+                            addLocalReservation(reservation)
+                        }
+                        //val responseMessage: String? = responseBody["message"]
+                        //if(responseMessage!=null) message.value = responseMessage
+                    }
+                }
+                else {
+                    error.value = true
+                }
             }
         }
+    }
+
+    fun addLocalReservation(reservation: Reservation){
+        reservationRepository.addLocalReservation(reservation)
+
     }
 
     fun getReservationByDate(date: Date) {

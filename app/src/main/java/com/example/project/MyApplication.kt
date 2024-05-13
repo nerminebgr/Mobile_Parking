@@ -10,8 +10,8 @@ import com.example.project.repositories.UserRepository
 class MyApplication:Application() {
 
     private val dataBase by lazy { AppDatabase.getInstance(this) }
-    private val userDao by lazy { dataBase.getUserDao() }
-    val userRepository by lazy { UserRepository(userDao) }
+
+
 
     private val endopoint by lazy { Endpoint.createEndpoint() }
 
@@ -20,5 +20,8 @@ class MyApplication:Application() {
 
     private val parkingDao by lazy { dataBase.getParkingDao() }
     val parkingRepository by lazy { ParkingRepository(endopoint,parkingDao) }
+
+    private val userDao by lazy { dataBase.getUserDao() }
+    val userRepository by lazy { UserRepository(endopoint,userDao) }
 
 }

@@ -6,7 +6,8 @@ import android.content.SharedPreferences
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
-object authmanager {private const val PREF_NAME = "auth_pref"
+object authmanager {
+    private const val PREF_NAME = "auth_pref"
     private const val KEY_EMAIL = "email"
     private const val KEY_PASSWORD = "password"
     private const val KEY_NAME = "name"

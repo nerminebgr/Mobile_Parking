@@ -98,7 +98,7 @@ class MainActivity : ComponentActivity() {
 fun BottomNavScreen(navController: NavHostController, reservationModel: ResevationModel,parkingModel: ParkingModel,userModel: UserModel) {
     val currentRoute = currentRoute(navController)
     val context = LocalContext.current
-    val isLoggedIn = true
+    val isLoggedIn = userModel.isLoggedIn
     Scaffold(
         bottomBar = {
             BottomAppBar {
@@ -129,15 +129,15 @@ fun BottomNavScreen(navController: NavHostController, reservationModel: Resevati
         ) {
             NavHost(navController = navController, startDestination = DestinationPath.Splash.route) {
                 composable(DestinationPath.Home.route) { DisplayHome(navController = navController,reservationModel,parkingModel, userModel) }
-                composable(DestinationPath.SignIn.route) { DisplaySignIn(navController = navController) }
-                composable(DestinationPath.SignUp.route) { DisplaySignUP(navController) }
+                composable(DestinationPath.SignIn.route) { DisplaySignIn(navController = navController,userModel) }
+                composable(DestinationPath.SignUp.route) { DisplaySignUP(navController,userModel) }
                 composable(DestinationPath.Splash.route) { SplashScreen(navController)}
                 composable(DestinationPath.Reservations.route) {
-                    if (isLoggedIn) {
+                    if (userModel.isLoggedIn.value) {
                         DisplayReservations(navController = navController,reservationModel,parkingModel, userModel)
                     }
                     else {
-                        DisplaySignIn(navController)
+                        DisplaySignIn(navController,userModel)
                     }
                 }
             }

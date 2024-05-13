@@ -9,7 +9,7 @@ import java.util.Date
 
 @Dao
 interface ReservationDao {
-    @Query("select * from reservations where userId= :userId")
+    @Query("select * from reservations where conducteurId= :userId")
     fun getUserReservations(userId:Int):List<Reservation>
 
     @Query("select * from reservations ")
@@ -26,7 +26,7 @@ interface ReservationDao {
     @Query("delete from reservations")
     fun deleteReservations()
 
-    @Query("select * from reservations where date = :date")
+    @Query("select * from reservations where date_entree = :date")
     fun getReservationByDate(date:Date):List<Reservation>
     @Insert
     fun addReservation(vararg reservation: Reservation)

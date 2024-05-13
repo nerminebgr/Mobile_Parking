@@ -12,7 +12,7 @@ interface UserDao {
     fun getUsersByFirstName(firstName:String):List<User>
 
     @Query("select * from users where id = :id")
-    fun getUsersByID(id:Int): User
+    fun getUsersByID(id:Int): User?
 
     @Insert
     fun addUser(user: User)

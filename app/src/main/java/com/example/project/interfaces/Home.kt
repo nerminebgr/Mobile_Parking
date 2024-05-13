@@ -54,7 +54,7 @@ import java.util.Date
 @Composable
 fun DisplayHome(navController: NavHostController, reservationModel: ResevationModel, parkingModel: ParkingModel, userModel: UserModel) {
 
-    var user = User(firstName = "test", lastName = "test")
+    var user = userModel.authUser.value
 
     LaunchedEffect(Unit){
         parkingModel.getAllParkings()
@@ -203,22 +203,23 @@ fun DisplayHome(navController: NavHostController, reservationModel: ResevationMo
 
                         Column {
                             Button(onClick = {
-
-                                /*CoroutineScope(Dispatchers.IO).launch {
+                                if(user!=null){
                                     val res = Reservation(
-
-                                        userId = user.id,
+                                        conducteurId = user.id,
                                         parkingId = it.id,
-                                        date = Date()
+                                        date_entree = Date()
                                     )
                                     reservationModel.addReservation(res)
-                                }*/
+                                }
+
+
                             })
                             {
                                 Text(text = "Book-Now")
                             }
                         }
                     }
+                    Spacer(modifier = Modifier.height(10.dp))
 
 
                 }

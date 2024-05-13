@@ -46,16 +46,22 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.project.R
+import com.example.project.databases.DataClasses.RegisterRequest
+import com.example.project.databases.entities.User
 import com.example.project.interfaces.DestinationPath
+import com.example.project.models.UserModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DisplaySignUP(navController: NavHostController){
-    var name by remember { mutableStateOf("") }
+fun DisplaySignUP(navController: NavHostController,userModel: UserModel){
+    var firstname by remember { mutableStateOf("") }
+    var lastname by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var pwd by remember { mutableStateOf("") }
     val context = LocalContext.current
+
+
     Column (
         modifier = Modifier
             .padding(10.dp)
@@ -112,14 +118,32 @@ fun DisplaySignUP(navController: NavHostController){
         ) {
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(1f),
-                value = name,
-                onValueChange ={name= it},
+                value = firstname,
+                onValueChange ={firstname= it},
                 leadingIcon = { Icon(imageVector = Icons.Default.AccountCircle, contentDescription = "accountIcon" ,
                     tint = Color(0xFF703ED1)
                 ) },
-                label = { Text("Name") },
+                label = { Text("Firstname") },
                 placeholder = {
-                    Text(text = "Name",
+                    Text(text = "Firstname",
+                        color = Color(0xFF703ED1),
+                        style = TextStyle(
+                            fontSize = 14.sp,
+                        )
+                    )
+                },
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            OutlinedTextField(
+                modifier = Modifier.fillMaxWidth(1f),
+                value = lastname,
+                onValueChange ={lastname= it},
+                leadingIcon = { Icon(imageVector = Icons.Default.AccountCircle, contentDescription = "accountIcon" ,
+                    tint = Color(0xFF703ED1)
+                ) },
+                label = { Text("Lastname") },
+                placeholder = {
+                    Text(text = "Lastname",
                         color = Color(0xFF703ED1),
                         style = TextStyle(
                             fontSize = 14.sp,
@@ -173,9 +197,10 @@ fun DisplaySignUP(navController: NavHostController){
                 verticalArrangement = Arrangement.Center
             ){
                 Button( onClick = {
-                    if (name.isNotEmpty() && email.isNotEmpty() && pwd.isNotEmpty()) {
-                        authmanager.createUser(context, name, email, pwd)
-                        navController.navigate(DestinationPath.Reservations.route)
+                    if (firstname.isNotEmpty() && lastname.isNotEmpty() && email.isNotEmpty() && pwd.isNotEmpty()) {
+                        var user = RegisterRequest(email,pwd,firstname,lastname)
+                        userModel.registerUser(user)
+                        navController.navigate(DestinationPath.SignIn.route)
                     } else {
 
                     }

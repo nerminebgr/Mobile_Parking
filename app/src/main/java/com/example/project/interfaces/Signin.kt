@@ -1,6 +1,7 @@
 package com.example.project.interfaces
 
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -27,6 +28,7 @@ import androidx.compose.material.icons.rounded.ShoppingCart
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -57,12 +59,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.project.R
+import com.example.project.databases.DataClasses.Credentials
+import com.example.project.databases.DataClasses.RegisterRequest
 import com.example.project.interfaces.DestinationPath
+import com.example.project.models.UserModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DisplaySignIn(navController: NavHostController){
+fun DisplaySignIn(navController: NavHostController,userModel: UserModel){
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf("") }
@@ -169,15 +174,10 @@ fun DisplaySignIn(navController: NavHostController){
                 Button(
                     onClick = {
                         if (email.isNotEmpty() && password.isNotEmpty()) {
-
-                            if (authmanager.checkCredentials(email, password)) {
-                                authmanager.saveCredentials(context, email, password)
-                                navController.navigate(DestinationPath.Reservations.route) {
-
-                                    popUpTo(DestinationPath.Home.route)
-                                }
-                            } else {
-                                errorMessage = "Email or password is invalid"
+                            var user = Credentials(email,password)
+                            userModel.loginUser(user)
+                            navController.navigate(DestinationPath.Reservations.route) {
+                                popUpTo(DestinationPath.Home.route)
                             }
                         } else {
                             errorMessage = "Please enter email and password"
@@ -272,7 +272,26 @@ fun DisplaySignIn(navController: NavHostController){
 
 
         }
+        DisplayToast(userModel)
 
 
     }
+}
+
+
+@Composable
+fun Loading(userModel: UserModel ){
+    if (userModel.loading.value){
+        CircularProgressIndicator()
+    }
+}
+
+
+@Composable
+fun DisplayToast(userModel: UserModel ){
+    val context = LocalContext.current
+    if (userModel.error.value){
+        Toast.makeText(context,"Une erreur s'est produite!", Toast.LENGTH_SHORT).show()
+    }
+
 }
