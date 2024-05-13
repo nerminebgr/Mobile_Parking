@@ -40,7 +40,8 @@ import com.example.project.interfaces.DisplayHome
 import com.example.project.interfaces.DisplayReservations
 import com.example.project.interfaces.DisplaySignIn
 import com.example.project.interfaces.DisplaySignUP
-import com.example.project.interfaces.auth
+import com.example.project.interfaces.ParkingDetails
+
 import com.example.project.interfaces.getData
 import com.example.project.models.ParkingModel
 import com.example.project.models.ResevationModel
@@ -101,27 +102,39 @@ fun BottomNavScreen(navController: NavHostController, reservationModel: Resevati
     val isLoggedIn = userModel.isLoggedIn
     Scaffold(
         bottomBar = {
-            BottomAppBar {
-                NavigationBar {
-                    NavigationBarItem(
-                        icon = { Icon(Icons.Default.Home, contentDescription = "Home") },
-                        label = { Text("Home") },
-                        selected = currentRoute == DestinationPath.Home.route,
-                        onClick = { navController.navigate(DestinationPath.Home.route) }
-                    )
-                    NavigationBarItem(
-                        icon = { Icon(Icons.Default.AccountCircle, contentDescription = "Login") },
-                        label = { Text("Login") },
-                        selected = currentRoute == DestinationPath.SignIn.route,
-                        onClick = { navController.navigate(DestinationPath.SignIn.route) }
-                    )
-                    NavigationBarItem(
-                        icon = { Icon(Icons.Default.List, contentDescription = "Reservations") },
-                        label = { Text("Reservations") },
-                        selected = currentRoute == DestinationPath.Reservations.route,
-                        onClick = { navController.navigate(DestinationPath.Reservations.route) }
-                    )
+            if(currentRoute != DestinationPath.Splash.route && currentRoute != DestinationPath.SignIn.route && currentRoute != DestinationPath.SignUp.route ) {
+                BottomAppBar {
+                    NavigationBar {
+                        NavigationBarItem(
+                            icon = { Icon(Icons.Default.Home, contentDescription = "Home") },
+                            label = { Text("Home") },
+                            selected = currentRoute == DestinationPath.Home.route,
+                            onClick = { navController.navigate(DestinationPath.Home.route) }
+                        )
+                        NavigationBarItem(
+                            icon = {
+                                Icon(
+                                    Icons.Default.AccountCircle,
+                                    contentDescription = "Login"
+                                )
+                            },
+                            label = { Text("Login") },
+                            selected = currentRoute == DestinationPath.SignIn.route,
+                            onClick = { navController.navigate(DestinationPath.SignIn.route) }
+                        )
+                        NavigationBarItem(
+                            icon = {
+                                Icon(
+                                    Icons.Default.List,
+                                    contentDescription = "Reservations"
+                                )
+                            },
+                            label = { Text("Reservations") },
+                            selected = currentRoute == DestinationPath.Reservations.route,
+                            onClick = { navController.navigate(DestinationPath.Reservations.route) }
+                        )
 
+                    }
                 }
             }
         },
@@ -132,6 +145,10 @@ fun BottomNavScreen(navController: NavHostController, reservationModel: Resevati
                 composable(DestinationPath.SignIn.route) { DisplaySignIn(navController = navController,userModel) }
                 composable(DestinationPath.SignUp.route) { DisplaySignUP(navController,userModel) }
                 composable(DestinationPath.Splash.route) { SplashScreen(navController)}
+                composable(DestinationPath.ParkingDetails.route) {navBack->
+                    val id = navBack.arguments?.getString("parkingId")?.toInt()
+                    ParkingDetails(id,navController,parkingModel,userModel)
+                }
                 composable(DestinationPath.Reservations.route) {
                     if (userModel.isLoggedIn.value) {
                         DisplayReservations(navController = navController,reservationModel,parkingModel, userModel)

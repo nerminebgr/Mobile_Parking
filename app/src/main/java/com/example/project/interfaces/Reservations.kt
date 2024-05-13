@@ -51,20 +51,10 @@ fun DisplayReservations(navController: NavHostController, reservationModel: Rese
 
     var user = userModel.authUser.value
 
+
     val loading = remember {
         mutableStateOf(true)
     }
-
-    var parking = Parking(
-            nom="t",
-            commune = "t",
-            adresse = "r",
-            prix = "r",
-                dispo = "r",
-                distance = "r",
-                places = 100,
-                img = R.drawable.p1
-        )
 
 
     LaunchedEffect(Unit) {
@@ -106,7 +96,9 @@ fun DisplayReservations(navController: NavHostController, reservationModel: Rese
             )
             Button(
                 onClick = {
-                    if (user!=null) userModel.logout(user)
+                    if (user!=null) {
+                        userModel.logout(user)
+                    }
                     navController.navigate(DestinationPath.Home.route)
                 }
             ) {
@@ -174,7 +166,7 @@ fun DisplayReservations(navController: NavHostController, reservationModel: Rese
                             .fillMaxWidth()
                             .padding(10.dp)
                     ){
-                        Text(text = "id = ${it.id}")
+                        Text(text = "id = ${it.conducteurId}")
                     }
                     Row(
                         modifier = Modifier

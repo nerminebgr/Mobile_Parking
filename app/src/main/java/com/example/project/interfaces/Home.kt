@@ -3,6 +3,7 @@ package com.example.project.interfaces
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -109,6 +110,9 @@ fun DisplayHome(navController: NavHostController, reservationModel: ResevationMo
                         modifier = Modifier
                             .clip(RoundedCornerShape(16.dp))
                             .padding(10.dp)
+                            .clickable {
+                                navController.navigate(DestinationPath.ParkingDetails.getRoute(it.id))
+                            },
 
                     ) {
                         AsyncImage(model = URL +it.image,

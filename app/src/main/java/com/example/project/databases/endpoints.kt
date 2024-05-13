@@ -19,6 +19,9 @@ interface Endpoint {
     @GET("parkings/")
     suspend fun getAllParkings(): Response<List<Parking>>
 
+    @GET("parkings/{parkingId}/")
+    suspend fun getParkingDetail(@Path("parkingId") parkingId:Int): Response<Parking>
+
     @GET("reservations/{userId}/")
     suspend fun getAllUserReservations(@Path("userId") userId:Int): Response<List<Reservation>>
 

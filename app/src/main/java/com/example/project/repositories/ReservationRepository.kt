@@ -11,7 +11,7 @@ class ReservationRepository (private val endpoint: Endpoint, private val reserva
 
     suspend fun getAllUserReservations(userId:Int) = endpoint.getAllUserReservations(userId)
     suspend fun addReservation(reservation: Reservation) = endpoint.addReservation(reservation)
-    fun count() = reservationDao.count()
+    fun count(userId:Int) = reservationDao.count(userId)
 
     fun getUserReservations(userId:Int) = reservationDao.getUserReservations(userId)
 

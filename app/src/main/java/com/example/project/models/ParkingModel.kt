@@ -16,6 +16,7 @@ import kotlinx.coroutines.withContext
 class ParkingModel(private val parkingRepository: ParkingRepository): ViewModel() {
 
     var allParkings = mutableStateOf(listOf<Parking>())
+    var currentParking = mutableStateOf<Parking?>(null)
     var loading = mutableStateOf(false)
     var error = mutableStateOf(false)
 
@@ -68,6 +69,30 @@ class ParkingModel(private val parkingRepository: ParkingRepository): ViewModel(
         }
     }
 
+    fun getParkingDetail(parkingId: Int){
+        loading.value = true
+        error.value = false
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+
+                val response = parkingRepository.getParkingDetail(parkingId)
+                loading.value = false
+
+                if(response.isSuccessful){
+
+                    val parking = response.body()
+                    if(parking!=null){
+                        currentParking.value = parking
+                    }
+
+                }
+                else {
+                    error.value = true
+                }
+            }
+        }
+
+    }
 
     /*fun addParking(parkingE: ParkingE) {
         viewModelScope.launch {

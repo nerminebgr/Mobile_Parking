@@ -32,9 +32,13 @@ class ResevationModel (private val reservationRepository: ReservationRepository)
 
     fun getAllUserReservations(userID:Int){
         CoroutineScope(Dispatchers.IO).launch {
-
+            allUserReservations.value = listOf<Reservation>()
+            val count = reservationRepository.count(userID)
+            if (count == 0) {
                 getAllReservationsRemote(userID)
-
+            } else {
+                getAllReservationsLocal(userID)
+            }
         }
     }
     fun getAllReservationsLocal(userID:Int){

@@ -15,8 +15,8 @@ interface ReservationDao {
     @Query("select * from reservations ")
     fun getAllReservations():List<Reservation>
 
-    @Query("select count(*) from reservations")
-    fun count(): Int
+    @Query("select count(*) from reservations where conducteurId= :userId")
+    fun count(userId:Int): Int
 
 
 

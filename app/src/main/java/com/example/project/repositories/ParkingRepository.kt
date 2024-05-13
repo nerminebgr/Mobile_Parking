@@ -18,6 +18,8 @@ class ParkingRepository(private val endpoint: Endpoint,private val parkingDao: P
 
     suspend fun getAllParkings() = endpoint.getAllParkings()
 
+    suspend fun getParkingDetail(parkingId: Int) = endpoint.getParkingDetail(parkingId)
+
     fun addParking(parkingE: Parking) = parkingDao.addParking(parkingE)
 
     fun getParkings() = parkingDao.getParkings()

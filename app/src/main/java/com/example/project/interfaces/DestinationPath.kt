@@ -8,4 +8,8 @@ sealed class DestinationPath(val route : String) {
 
     object Reservations: Destination("reservations/{userId}")
 
+    object ParkingDetails:DestinationPath("parking_details/{parkingId}"){
+        fun getRoute (id:Int) = "parking_details/$id"
+    }
+
 }
