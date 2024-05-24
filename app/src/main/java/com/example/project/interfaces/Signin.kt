@@ -97,7 +97,7 @@ fun DisplaySignIn(navController: NavHostController,userModel: UserModel){
     val launcher = rememberFirebaseAuthLauncher(
         onAuthComplete = { authResult, isNewUser ->
             if (!isNewUser) {
-                //si le user est nouveau on l'insere dans la bdd et on conncte le
+                //si le user est nouveau on l'insere dans la bdd et on conncte le 
                 val userEmail = authResult.user!!.email!!
                 val firstname = authResult.user!!.displayName?.split(" ")?.get(0) ?: ""
                 val lastname = authResult.user!!.displayName?.split(" ")?.get(1) ?: ""
