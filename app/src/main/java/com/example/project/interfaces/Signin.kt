@@ -1,6 +1,6 @@
 package com.example.project.interfaces
 
-
+import kotlin.random.Random
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
@@ -72,6 +72,7 @@ import androidx.navigation.NavHostController
 import com.example.project.R
 import com.example.project.databases.DataClasses.Credentials
 import com.example.project.databases.DataClasses.RegisterRequest
+import com.example.project.databases.entities.User
 import com.example.project.interfaces.DestinationPath
 import com.example.project.models.UserModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -94,12 +95,25 @@ fun DisplaySignIn(navController: NavHostController,userModel: UserModel){
     var errorMessage by remember { mutableStateOf("") }
     var user by remember { mutableStateOf(Firebase.auth.currentUser) }
     val launcher = rememberFirebaseAuthLauncher(
-        onAuthComplete = { result ->
-            user = result.user
+        onAuthComplete = { authResult, isNewUser ->
+            if (!isNewUser) {
+                //si le user est nouveau on l'insere dans la bdd et on conncte le
+                val userEmail = authResult.user!!.email!!
+                val firstname = authResult.user!!.displayName?.split(" ")?.get(0) ?: ""
+                val lastname = authResult.user!!.displayName?.split(" ")?.get(1) ?: ""
+                val newUser = RegisterRequest(userEmail, generateRandomPassword(), firstname, lastname)
+                userModel.registerUser(newUser)
+                user = authResult.user
+            } else {
+                // Utilisateur existant, connecte-le
+                user = authResult.user
+            }
         },
         onAuthError = {
             user = null
-        }
+        },
+
+        userModel = userModel
     )
     val token = stringResource(id = R.string.client_id)
     val context = LocalContext.current
@@ -195,6 +209,7 @@ fun DisplaySignIn(navController: NavHostController,userModel: UserModel){
                 colors = TextFieldDefaults
                     .textFieldColors(containerColor = Color(0xFFF6F6F6))
 
+
             )
             Spacer(modifier = Modifier.height(20.dp))
             Column(
@@ -227,6 +242,21 @@ fun DisplaySignIn(navController: NavHostController,userModel: UserModel){
                 }
 
 
+            }
+            Row(
+
+
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+
+            ) {
+                Text(text = "Don't have an account? ")
+                Text(text = " Sing Up",
+                    color = Color(0xFF773FFF),
+                    modifier = Modifier
+                        .clickable {
+                            navController.navigate(DestinationPath.SignUp.route)
+                        })
             }
 
             Column(
@@ -272,11 +302,14 @@ fun DisplaySignIn(navController: NavHostController,userModel: UserModel){
                             letterSpacing = 0.1.em)
                     }
                 } else {
+                    navController.navigate(DestinationPath.Reservations.route) {
+                        popUpTo(DestinationPath.Home.route)
+                    }
 
                     Text("Hi, ${user!!.displayName}!",
                         fontFamily = FontFamily.SansSerif,
                         fontWeight = FontWeight.ExtraBold,
-                        fontSize = 14.sp, color = Color.White)
+                        fontSize = 14.sp, color = Color.Black)
 
                     Spacer(modifier = Modifier.height(30.dp))
 
@@ -312,30 +345,28 @@ fun DisplaySignIn(navController: NavHostController,userModel: UserModel){
 
 @Composable
 fun rememberFirebaseAuthLauncher(
-    onAuthComplete: (AuthResult) -> Unit,
-    onAuthError: (ApiException) -> Unit
+    onAuthComplete: (AuthResult, Boolean) -> Unit, // Ajoutez un booléen pour indiquer si l'utilisateur est nouveau
+    onAuthError: (ApiException) -> Unit,
+    userModel: UserModel
 ): ManagedActivityResultLauncher<Intent, ActivityResult> {
     val scope = rememberCoroutineScope()
     return rememberLauncherForActivityResult(
-        ActivityResultContracts
-        .StartActivityForResult()){result ->
+        ActivityResultContracts.StartActivityForResult()) { result ->
         val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
         try {
-            val account = task
-                .getResult(ApiException::class.java)!!
+            val account = task.getResult(ApiException::class.java)!!
             Log.d("GoogleAuth", "account $account")
-            val credential = GoogleAuthProvider
-                .getCredential(account.idToken!!, null)
+            val credential = GoogleAuthProvider.getCredential(account.idToken!!, null)
             scope.launch {
-                val authResult = Firebase
-                    .auth.signInWithCredential(credential).await()
-                onAuthComplete(authResult)
+                val authResult = Firebase.auth.signInWithCredential(credential).await()
+                val gmail = authResult.user!!.email!!
+                val isNewUser = userModel.checkEmail(gmail)
+                onAuthComplete(authResult, isNewUser) // Pass the boolean indicating if the user is new
             }
         } catch (e: ApiException) {
             Log.d("GoogleAuth", e.toString())
             onAuthError(e)
         }
-
     }
 }
 
@@ -346,12 +377,16 @@ fun Loading(userModel: UserModel ){
     }
 }
 
-
+fun generateRandomPassword(length: Int = 10): String {
+    val allowedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+    return (1..length)
+        .map { allowedChars.random() }
+        .joinToString("")
+}
 @Composable
 fun DisplayToast(userModel: UserModel ){
     val context = LocalContext.current
     if (userModel.error.value){
         Toast.makeText(context,"Une erreur s'est produite!", Toast.LENGTH_SHORT).show()
     }
-
 }

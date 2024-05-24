@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -55,6 +56,7 @@ import java.util.Date
 @Composable
 fun DisplayHome(navController: NavHostController, reservationModel: ResevationModel, parkingModel: ParkingModel, userModel: UserModel) {
 
+
     var user = userModel.authUser.value
 
     LaunchedEffect(Unit){
@@ -64,6 +66,13 @@ fun DisplayHome(navController: NavHostController, reservationModel: ResevationMo
 
 
     Column {
+       /* val displayName = userModel.displayName ?: "User"
+        Text(
+            text = "Hi, $displayName!",
+            modifier = Modifier.padding(16.dp),
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold
+        )*/
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
@@ -97,7 +106,7 @@ fun DisplayHome(navController: NavHostController, reservationModel: ResevationMo
         /*Row {
             Text(text = "$parkings")
         }*/
-        LazyColumn {
+        LazyRow() {
             items(parkingModel.allParkings.value) {
                 Column(
                     modifier = Modifier
@@ -106,7 +115,7 @@ fun DisplayHome(navController: NavHostController, reservationModel: ResevationMo
                         .background(Color(0xFFE0E0E0))
 
                 ) {
-                    Row(
+                    Column(
                         modifier = Modifier
                             .clip(RoundedCornerShape(16.dp))
                             .padding(10.dp)
@@ -197,12 +206,10 @@ fun DisplayHome(navController: NavHostController, reservationModel: ResevationMo
 
                         }
                     }
-                    Row(
+                    Column(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(bottom = 15.dp),
-                        horizontalArrangement = Arrangement.SpaceEvenly,
-                        verticalAlignment = Alignment.CenterVertically,
                     ) {
 
                         Column {

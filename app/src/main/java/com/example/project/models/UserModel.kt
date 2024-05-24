@@ -8,6 +8,7 @@ import com.example.project.databases.DataClasses.Credentials
 import com.example.project.databases.DataClasses.RegisterRequest
 import com.example.project.databases.entities.User
 import com.example.project.repositories.UserRepository
+import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -23,6 +24,16 @@ class UserModel(private val userRepository: UserRepository): ViewModel() {
     var loading = mutableStateOf(false)
     var error = mutableStateOf(false)
     var isLoggedIn = mutableStateOf(false)
+    var emailExists = mutableStateOf(false)
+    var authUserG = mutableStateOf<FirebaseUser?>(null)
+    /*val displayName: String?
+        get() = authUser.value?.displayName ?: "User"
+    fun setUser(user: FirebaseUser?) {
+        authUserG.value = user
+    }*/
+
+
+
 
     fun registerUser(user: RegisterRequest) {
             loading.value = true
@@ -85,6 +96,17 @@ class UserModel(private val userRepository: UserRepository): ViewModel() {
         authUser.value = null
 
     }
+    suspend fun checkEmail(email: String): Boolean {
+        val response = userRepository.checkEmail(mapOf("email" to email))
+        return if (response.isSuccessful) {
+            response.body()?.get("exists") ?: false
+        } else {
+            false
+        }
+    }
+
+
+
 
     fun addUser(user: User) {
         viewModelScope.launch {

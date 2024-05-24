@@ -31,8 +31,11 @@ interface Endpoint {
     @POST("auth/register/")
     suspend fun register(@Body user: RegisterRequest): Response<User>
 
+
     @POST("auth/login/")
     suspend fun login(@Body credentials: Credentials): Response<User>
+    @POST("auth/checkemail/")
+    suspend fun checkEmail(@Body email: Map<String, String>): Response<Map<String, Boolean>>
 
     companion object {
         var endpoint: Endpoint? = null

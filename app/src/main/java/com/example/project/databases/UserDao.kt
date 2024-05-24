@@ -18,6 +18,7 @@ interface UserDao {
     fun addUser(user: User)
     @Delete
     fun deleteUser(user: User)
-
+    @Query("SELECT * FROM users WHERE email = :email")
+    fun getUserByEmail(email: String): User?
 
 }

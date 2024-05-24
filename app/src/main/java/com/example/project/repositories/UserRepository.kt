@@ -11,9 +11,11 @@ class UserRepository(private val endpoint: Endpoint, private val userDao: UserDa
     suspend fun register(user: RegisterRequest) = endpoint.register(user)
 
     suspend fun login(user: Credentials) = endpoint.login(user)
+    suspend fun checkEmail(email: Map<String, String>) = endpoint.checkEmail(email)
 
     fun addUser(user: User) = userDao.addUser(user)
 
     fun getUsersByID(id:Int) =  userDao.getUsersByID(id)
+
 
 }
