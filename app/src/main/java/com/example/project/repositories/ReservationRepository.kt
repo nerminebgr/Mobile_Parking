@@ -10,7 +10,13 @@ import java.util.Date
 class ReservationRepository (private val endpoint: Endpoint, private val reservationDao: ReservationDao) {
 
     suspend fun getAllUserReservations(userId:Int) = endpoint.getAllUserReservations(userId)
+
+    suspend fun getReservationDetails(id:Int) = endpoint.getReservationDetails(id)
     suspend fun addReservation(reservation: Reservation) = endpoint.addReservation(reservation)
+
+    suspend fun getReservationNotifications()= endpoint.getNotification()
+
+
     fun count(userId:Int) = reservationDao.count(userId)
 
     fun getUserReservations(userId:Int) = reservationDao.getUserReservations(userId)

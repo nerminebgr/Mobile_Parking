@@ -89,7 +89,8 @@ fun DisplayHome(navController: NavHostController, reservationModel: ResevationMo
                 text = "Parkings",
                 modifier = Modifier
                     .padding(start = 30.dp),
-                fontWeight = FontWeight.ExtraBold
+                fontWeight = FontWeight.ExtraBold,
+                onTextLayout = {}
             )
 
         }
@@ -132,7 +133,8 @@ fun DisplayHome(navController: NavHostController, reservationModel: ResevationMo
                         ) {
                             Text(
                                 text = it.nom, fontWeight = FontWeight.Bold,
-                                fontSize = 12.sp, modifier = Modifier.padding(start = 10.dp)
+                                fontSize = 12.sp, modifier = Modifier.padding(start = 10.dp),
+                                onTextLayout = {}
                             )
                             Spacer(modifier = Modifier.height(10.dp))
                             Row(
@@ -151,7 +153,8 @@ fun DisplayHome(navController: NavHostController, reservationModel: ResevationMo
                                 )
                                 Text(
                                     text = it.adresse,
-                                    fontSize = 11.sp
+                                    fontSize = 11.sp,
+                                    onTextLayout = {}
                                 )
                             }
 
@@ -179,7 +182,8 @@ fun DisplayHome(navController: NavHostController, reservationModel: ResevationMo
                                         val nb = it.places
                                         Text(
                                             text = "$nb Car Spots",
-                                            fontSize = 10.sp
+                                            fontSize = 10.sp,
+                                            onTextLayout = {}
                                         )
                                     }
 
@@ -189,7 +193,8 @@ fun DisplayHome(navController: NavHostController, reservationModel: ResevationMo
                                 ) {
                                     Text(
                                         text = it.prix,
-                                        fontSize = 10.sp
+                                        fontSize = 10.sp,
+                                        onTextLayout = {}
                                     )
                                 }
                             }
@@ -207,19 +212,23 @@ fun DisplayHome(navController: NavHostController, reservationModel: ResevationMo
 
                         Column {
                             Button(onClick = {
-                                if(user!=null){
+
+                                navController.navigate(DestinationPath.ReservationForm.getRoute(it.id))
+
+                                /*if(user!=null){
                                     val res = Reservation(
                                         conducteurId = user.id,
                                         parkingId = it.id,
                                         date_entree = Date()
                                     )
                                     reservationModel.addReservation(res)
-                                }
+                                }*/
 
 
                             })
                             {
-                                Text(text = "Book-Now")
+                                Text(text = "Book-Now",
+                                    onTextLayout = {})
                             }
                         }
                     }

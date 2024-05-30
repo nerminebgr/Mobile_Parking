@@ -35,12 +35,14 @@ import com.example.project.databases.ReservationDao
 import com.example.project.databases.UserDao
 import com.example.project.databases.entities.Parking
 import com.example.project.databases.entities.User
+import com.example.project.interfaces.ConfirmReservation
 import com.example.project.interfaces.DestinationPath
 import com.example.project.interfaces.DisplayHome
 import com.example.project.interfaces.DisplayReservations
 import com.example.project.interfaces.DisplaySignIn
 import com.example.project.interfaces.DisplaySignUP
 import com.example.project.interfaces.ParkingDetails
+import com.example.project.interfaces.ReservationForm
 
 import com.example.project.interfaces.getData
 import com.example.project.models.ParkingModel
@@ -149,6 +151,14 @@ fun BottomNavScreen(navController: NavHostController, reservationModel: Resevati
                     val id = navBack.arguments?.getString("parkingId")?.toInt()
                     ParkingDetails(id,navController,parkingModel,userModel)
                 }
+                composable(DestinationPath.ReservationForm.route) {navBack->
+                    val id = navBack.arguments?.getString("parkingId")?.toInt()
+                    ReservationForm(id,navController,reservationModel,parkingModel,userModel)
+                }
+                composable(DestinationPath.ConfirmReservation.route) {navBack->
+                    val id = navBack.arguments?.getString("id")?.toInt()
+                    ConfirmReservation(id,navController,reservationModel)
+                }
                 composable(DestinationPath.Reservations.route) {
                     if (userModel.isLoggedIn.value) {
                         DisplayReservations(navController = navController,reservationModel,parkingModel, userModel)
@@ -169,29 +179,3 @@ fun currentRoute(navController: NavHostController): String? {
     return navBackStackEntry?.destination?.route
 }
 
-/*
-@SuppressLint("CoroutineCreationDuringComposition")
-fun addData(parkingModel: ParkingModel, userModel: UserModel){
-    val parkinglist:List<Parking> = getData()
-    CoroutineScope(Dispatchers.IO).launch {
-        parkingModel.deleteParkings()
-
-        val user = User(firstName="firstName",lastName="lastName")
-        userModel.addUser(user)
-
-        for(i in 0 .. 4){
-            var parking = ParkingE(
-                nom=parkinglist[i].nom,
-                commune=parkinglist[i].commune,
-                adresse=parkinglist[i].adresse,
-                prix=parkinglist[i].prix,
-                dispo=parkinglist[i].dispo,
-                distance=parkinglist[i].distance,
-                places=parkinglist[i].places,
-                img=parkinglist[i].img
-            )
-            parkingModel.addParking(parking)
-        }
-
-    }
-}*/

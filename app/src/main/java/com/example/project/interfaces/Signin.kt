@@ -61,6 +61,7 @@ import androidx.navigation.NavHostController
 import com.example.project.R
 import com.example.project.databases.DataClasses.Credentials
 import com.example.project.databases.DataClasses.RegisterRequest
+import com.example.project.databases.DataClasses.TokenRequest
 import com.example.project.interfaces.DestinationPath
 import com.example.project.models.UserModel
 
@@ -97,7 +98,8 @@ fun DisplaySignIn(navController: NavHostController,userModel: UserModel){
                 fontWeight = FontWeight.ExtraBold,
                 fontSize = 45.sp,
                 color = Color(0xFF703ED1),
-                style = TextStyle(lineHeight = 70.sp)
+                style = TextStyle(lineHeight = 70.sp),
+                onTextLayout = {}
             )
 
         }
@@ -105,7 +107,8 @@ fun DisplaySignIn(navController: NavHostController,userModel: UserModel){
             Text(
                 text = errorMessage,
                 color = Color.Red,
-                modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp)
+                modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
+                onTextLayout = {}
             )
         }
         Column(
@@ -123,14 +126,16 @@ fun DisplaySignIn(navController: NavHostController,userModel: UserModel){
                         tint = Color(0xFF703ED1)
                     )
                 },
-                label = { Text("Email") },
+                label = { Text(text="Email",
+                    onTextLayout = {}) },
                 placeholder = {
                     Text(
                         text = "Email",
                         color = Color(0xFF703ED1),
                         style = TextStyle(
                             fontSize = 14.sp,
-                        )
+                        ),
+                        onTextLayout = {}
                     )
                 },
                 colors = TextFieldDefaults
@@ -148,7 +153,8 @@ fun DisplaySignIn(navController: NavHostController,userModel: UserModel){
                         tint = Color(0xFF703ED1)
                     )
                 },
-                label = { Text("Password") },
+                label = { Text(text="Password",
+                    onTextLayout = {}) },
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 placeholder = {
@@ -158,7 +164,8 @@ fun DisplaySignIn(navController: NavHostController,userModel: UserModel){
                         style = TextStyle(
                             fontSize = 14.sp,
 
-                            )
+                            ),
+                        onTextLayout = {}
                     )
                 },
                 colors = TextFieldDefaults
@@ -176,6 +183,7 @@ fun DisplaySignIn(navController: NavHostController,userModel: UserModel){
                         if (email.isNotEmpty() && password.isNotEmpty()) {
                             var user = Credentials(email,password)
                             userModel.loginUser(user)
+                            userModel.addToken(TokenRequest(email,""))
                             navController.navigate(DestinationPath.Reservations.route) {
                                 popUpTo(DestinationPath.Home.route)
                             }
@@ -192,6 +200,7 @@ fun DisplaySignIn(navController: NavHostController,userModel: UserModel){
                     Text(
                         text = "Sign In",
                         fontSize = 15.sp,
+                        onTextLayout = {}
                     )
                 }
 
@@ -218,7 +227,8 @@ fun DisplaySignIn(navController: NavHostController,userModel: UserModel){
                     )
                     Text(
                         text = " Or Sign in with ",
-                        color = Color(0xFFAFB0AF)
+                        color = Color(0xFFAFB0AF),
+                        onTextLayout = {}
                     )
 
                     Divider(
@@ -258,9 +268,11 @@ fun DisplaySignIn(navController: NavHostController,userModel: UserModel){
                         .align(Alignment.CenterHorizontally)
 
                 ) {
-                    Text(text = "Don't have an account? ")
+                    Text(text = "Don't have an account? ",
+                        onTextLayout = {})
                     Text(text = " Sing Up",
                         color = Color(0xFF773FFF),
+                        onTextLayout = {},
                         modifier = Modifier
                             .clickable {
                                 navController.navigate(DestinationPath.SignUp.route)

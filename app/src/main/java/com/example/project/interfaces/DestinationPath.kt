@@ -12,4 +12,11 @@ sealed class DestinationPath(val route : String) {
         fun getRoute (id:Int) = "parking_details/$id"
     }
 
+    object ReservationForm:DestinationPath("reservationForm/{parkingId}"){
+        fun getRoute (id:Int) = "reservationForm/$id"
+    }
+
+    object ConfirmReservation:DestinationPath("ConfirmReservation/{id}"){
+        fun getRoute (id:Int) = "ConfirmReservation/$id"
+    }
 }

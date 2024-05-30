@@ -22,6 +22,8 @@ data class Reservation (
     var conducteurId:Int,
     var parkingId:Int,
     var date_entree: Date,
+    var heure_entree: String,
+    var heure_sortie: String,
 )
 
 

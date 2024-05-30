@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -21,12 +20,10 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,10 +38,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
@@ -52,8 +47,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.project.R
 import com.example.project.databases.DataClasses.RegisterRequest
-import com.example.project.databases.entities.User
-import com.example.project.interfaces.DestinationPath
 import com.example.project.models.UserModel
 
 
@@ -106,13 +99,15 @@ fun DisplaySignUP(navController: NavHostController,userModel: UserModel){
                 leadingIcon = { Icon(imageVector = Icons.Default.AccountCircle, contentDescription = "accountIcon" ,
                     tint = Color(0xFF9695A8)
                 ) },
-                label = { Text("Firstname") },
+                label = { Text(text="Firstname",
+                    onTextLayout = {}) },
                 placeholder = {
                     Text(text = "Firstname",
                         color = Color(0xFF9695A8),
                         style = TextStyle(
                             fontSize = 14.sp,
-                        )
+                        ),
+                        onTextLayout = {}
                     )
                 },
             )
@@ -124,13 +119,15 @@ fun DisplaySignUP(navController: NavHostController,userModel: UserModel){
                 leadingIcon = { Icon(imageVector = Icons.Default.AccountCircle, contentDescription = "accountIcon" ,
                     tint = Color(0xFF9695A8)
                 ) },
-                label = { Text("Lastname") },
+                label = { Text(text="Lastname",
+                    onTextLayout = {}) },
                 placeholder = {
                     Text(text = "Lastname",
                         color = Color(0xFF9695A8),
                         style = TextStyle(
                             fontSize = 14.sp,
-                        )
+                        ),
+                        onTextLayout = {}
                     )
                 },
             )
@@ -142,13 +139,15 @@ fun DisplaySignUP(navController: NavHostController,userModel: UserModel){
                 leadingIcon = { Icon(imageVector = Icons.Default.Email, contentDescription = "emailIcon" ,
                     tint = Color(0xFF9695A8)
                 ) },
-                label = { Text("Email") },
+                label = { Text(text="Email",
+                    onTextLayout = {}) },
                 placeholder = {
                     Text(text = "Email",
                         color = Color(0xFF9695A8),
                         style = TextStyle(
                             fontSize = 14.sp,
-                        )
+                        ),
+                        onTextLayout = {}
                     )
                 },
                 // colors = TextFieldDefaults.textFieldColors(containerColor = Color(0xFFF6F6F6))
@@ -159,16 +158,16 @@ fun DisplaySignUP(navController: NavHostController,userModel: UserModel){
                 value = pwd,
                 onValueChange ={pwd= it},
                 leadingIcon = { Icon(imageVector = Icons.Default.Lock, contentDescription = "pwdIcon",tint = Color(0xFF9695A8)) },
-                label = { Text("Password") },
+                label = { Text(text="Password",
+                    onTextLayout = {}) },
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 placeholder = {
                     Text(text = "Password",
                         color = Color(0xFF9695A8),
                         style = TextStyle(
-                            fontSize = 14.sp,
-
-                            )
+                            fontSize = 14.sp,),
+                        onTextLayout = {}
                     )
                 },
 
@@ -179,7 +178,8 @@ fun DisplaySignUP(navController: NavHostController,userModel: UserModel){
                 value = confirm_pwd,
                 onValueChange ={confirm_pwd= it},
                 leadingIcon = { Icon(imageVector = Icons.Default.Lock, contentDescription = "pwdIcon",tint = Color(0xFF9695A8)) },
-                label = { Text("Confirm Password") },
+                label = { Text(text="Confirm Password",
+                    onTextLayout = {}) },
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 placeholder = {
@@ -187,8 +187,8 @@ fun DisplaySignUP(navController: NavHostController,userModel: UserModel){
                         color = Color(0xFF9695A8),
                         style = TextStyle(
                             fontSize = 14.sp,
-
-                            )
+                            ),
+                        onTextLayout = {}
                     )
                 },
 
@@ -203,6 +203,7 @@ fun DisplaySignUP(navController: NavHostController,userModel: UserModel){
                 Button( onClick = {
                     if (firstname.isNotEmpty() && lastname.isNotEmpty() && email.isNotEmpty() && pwd.isNotEmpty() && pwd == confirm_pwd) {
                         val trimemail = email.trimEnd() // Trim trailing spaces from password
+
                         val user = RegisterRequest(trimemail, pwd, firstname, lastname)
                         userModel.registerUser(user)
                         navController.navigate(DestinationPath.SignIn.route)
@@ -218,6 +219,7 @@ fun DisplaySignUP(navController: NavHostController,userModel: UserModel){
                 ) {
                     Text(text = "Sign Up",
                         fontSize = 15.sp,
+                        onTextLayout = {}
                     )
                 }
 

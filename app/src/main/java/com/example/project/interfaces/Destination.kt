@@ -7,4 +7,7 @@ sealed class Destination(val route : String) {
     object Reservations: Destination("reservations/{userId}") {
         fun createRoute(userId:Int) = "reservations/$userId"
     }
+    object ReservationForm: Destination("reservation/{parkId}") {
+        fun createRoute(parkId:Int) = "reservation/$parkId"
+    }
 }

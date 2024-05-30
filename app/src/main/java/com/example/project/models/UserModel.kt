@@ -1,16 +1,20 @@
 package com.example.project.models
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.project.databases.DataClasses.Credentials
 import com.example.project.databases.DataClasses.RegisterRequest
+import com.example.project.databases.DataClasses.TokenRequest
 import com.example.project.databases.entities.User
 import com.example.project.repositories.UserRepository
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
 
@@ -83,6 +87,35 @@ class UserModel(private val userRepository: UserRepository): ViewModel() {
     fun logout(user : User){
         isLoggedIn.value = false
         authUser.value = null
+
+    }
+
+
+    fun addToken(user: TokenRequest) {
+        loading.value = true
+        error.value = false
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+
+                val token = userRepository.generateToken()
+                if (token != null){
+                    user.token = token
+                    val response = userRepository.update(user)
+                    loading.value = false
+
+                    if(response.isSuccessful){
+                        val responseBody  = response.body()
+                        if(responseBody !=null){
+                            //val responseMessage: String? = responseBody["message"]
+                            //if(responseMessage!=null) message.value = responseMessage
+                        }
+                    }
+                    else {
+                        error.value = true
+                    }
+                }
+            }
+        }
 
     }
 

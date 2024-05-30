@@ -1,3 +1,3 @@
 package com.example.project
 
-const val URL = "https://f832-41-111-189-195.ngrok-free.app"
+const val URL = "https://925a-41-220-147-217.ngrok-free.app"

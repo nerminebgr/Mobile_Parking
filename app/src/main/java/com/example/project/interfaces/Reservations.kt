@@ -92,9 +92,12 @@ fun DisplayReservations(navController: NavHostController, reservationModel: Rese
             Text(text = "My Reservations",
                 modifier = Modifier
                     .padding(start = 30.dp),
-                fontWeight = FontWeight.ExtraBold
+                fontWeight = FontWeight.ExtraBold,
+                onTextLayout = {}
             )
             Button(
+                modifier = Modifier
+                    .padding(start = 30.dp),
                 onClick = {
                     if (user!=null) {
                         userModel.logout(user)
@@ -102,7 +105,8 @@ fun DisplayReservations(navController: NavHostController, reservationModel: Rese
                     navController.navigate(DestinationPath.Home.route)
                 }
             ) {
-                Text(text = "Logout")
+                Text(text = "Logout",
+                    onTextLayout = {})
             }
 
 
@@ -119,17 +123,20 @@ fun DisplayReservations(navController: NavHostController, reservationModel: Rese
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally // Centers content within each column
             ) {
-                Text(text = "Ongoing")
+                Text(text = "Ongoing",
+                    onTextLayout = {})
             }
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally // Centers content within each column
             ) {
-                Text(text = "Completed")
+                Text(text = "Completed",
+                    onTextLayout = {})
             }
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally // Centers content within each column
             ) {
-                Text(text = "Cancelled")
+                Text(text = "Cancelled",
+                    onTextLayout = {})
             }
         }
 
@@ -149,7 +156,8 @@ fun DisplayReservations(navController: NavHostController, reservationModel: Rese
                             .padding(10.dp)
                     ){
 
-                        Text(text = "ParkingID = ${it.parkingId}")
+                        Text(text = "ParkingID = ${it.parkingId}",
+                            onTextLayout = {})
                     }
                     Spacer(modifier = Modifier.height(15.dp))
                     Row(
@@ -158,7 +166,8 @@ fun DisplayReservations(navController: NavHostController, reservationModel: Rese
                             .padding(10.dp)
                     ){
 
-                        Text(text = "Date = ${it.date_entree}")
+                        Text(text = "Date = ${it.date_entree}",
+                        onTextLayout = {})
                     }
                     Spacer(modifier = Modifier.height(15.dp))
                     Row(
@@ -166,7 +175,17 @@ fun DisplayReservations(navController: NavHostController, reservationModel: Rese
                             .fillMaxWidth()
                             .padding(10.dp)
                     ){
-                        Text(text = "id = ${it.conducteurId}")
+                        Text(text = "entrée = ${it.heure_entree}",
+                            onTextLayout = {})
+                    }
+                    Spacer(modifier = Modifier.height(15.dp))
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(10.dp)
+                    ){
+                        Text(text = "sortie = ${it.heure_sortie}",
+                            onTextLayout = {})
                     }
                     Row(
                         modifier = Modifier
@@ -176,8 +195,11 @@ fun DisplayReservations(navController: NavHostController, reservationModel: Rese
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Column {
-                            Button(onClick = { /*TODO*/ }) {
-                                Text(text = "Get Qr-code")
+                            Button(onClick = {
+                                navController.navigate(DestinationPath.ConfirmReservation.getRoute(it.id))
+                            }) {
+                                Text(text = "Get Qr-code",
+                                    onTextLayout = {})
                             }
                         }
 

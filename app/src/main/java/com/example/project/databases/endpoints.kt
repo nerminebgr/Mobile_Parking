@@ -2,7 +2,10 @@ package com.example.project.databases
 
 import com.example.project.URL
 import com.example.project.databases.DataClasses.Credentials
+import com.example.project.databases.DataClasses.NotificationResponse
 import com.example.project.databases.DataClasses.RegisterRequest
+import com.example.project.databases.DataClasses.ReservationDetails
+import com.example.project.databases.DataClasses.TokenRequest
 import com.example.project.databases.entities.Parking
 import com.example.project.databases.entities.Reservation
 import com.example.project.databases.entities.User
@@ -25,6 +28,9 @@ interface Endpoint {
     @GET("reservations/{userId}/")
     suspend fun getAllUserReservations(@Path("userId") userId:Int): Response<List<Reservation>>
 
+    @GET("reservations/reservation/{id}/")
+    suspend fun getReservationDetails(@Path("id") id:Int): Response<ReservationDetails>
+
     @POST("reservations/addReservation")
     suspend fun addReservation(@Body reservation: Reservation): Response<Reservation>
 
@@ -33,6 +39,12 @@ interface Endpoint {
 
     @POST("auth/login/")
     suspend fun login(@Body credentials: Credentials): Response<User>
+
+    @POST("/notif/update-token/")
+    suspend fun update(@Body user: TokenRequest): Response<User>
+
+    @GET("/notif/send-notifications/")
+    suspend fun getNotification(): Response<NotificationResponse>
 
     companion object {
         var endpoint: Endpoint? = null

@@ -156,6 +156,7 @@ fun ParkingDetails(id:Int?, navController: NavHostController,parkingModel: Parki
                                 text = "car parking",
                                 fontSize = 20.sp,
                                 color = Color(0xFF7136ff),
+                                onTextLayout = {}
                             )
                         }
 
@@ -170,6 +171,7 @@ fun ParkingDetails(id:Int?, navController: NavHostController,parkingModel: Parki
                         text = parking.nom,
                         fontSize = 30.sp,
                         fontWeight = FontWeight.Bold,
+                        onTextLayout = {}
                     )
 
 
@@ -179,6 +181,7 @@ fun ParkingDetails(id:Int?, navController: NavHostController,parkingModel: Parki
                         text = parking.adresse,
                         fontSize = 15.sp,
                         color = Color.Gray,
+                        onTextLayout = {}
                     )
 
                     Spacer(modifier = Modifier.height(20.dp))
@@ -205,6 +208,7 @@ fun ParkingDetails(id:Int?, navController: NavHostController,parkingModel: Parki
                                 text = "à 5 minutes",
                                 fontSize = 15.sp,
                                 color = Color.Black,
+                                onTextLayout = {}
                             )
                         }
 
@@ -224,6 +228,7 @@ fun ParkingDetails(id:Int?, navController: NavHostController,parkingModel: Parki
                                 text = "${parking.places} blocks disponibles",
                                 fontSize = 15.sp,
                                 color = Color.Black,
+                                onTextLayout = {}
                             )
                         }
                     }
@@ -236,6 +241,7 @@ fun ParkingDetails(id:Int?, navController: NavHostController,parkingModel: Parki
                             fontSize = 15.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color.Black,
+                            onTextLayout = {}
                         )
 
                         Spacer(modifier = Modifier.height(10.dp))
@@ -245,6 +251,7 @@ fun ParkingDetails(id:Int?, navController: NavHostController,parkingModel: Parki
                             fontSize = 15.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color.Gray,
+                            onTextLayout = {}
                         )
                     }
 
@@ -276,6 +283,7 @@ fun ParkingDetails(id:Int?, navController: NavHostController,parkingModel: Parki
                         text = "Prix:",
                         fontSize = 15.sp,
                         color = Color.Gray,
+                        onTextLayout = {}
                     )
 
                     Row(verticalAlignment = Alignment.Bottom) {
@@ -284,12 +292,14 @@ fun ParkingDetails(id:Int?, navController: NavHostController,parkingModel: Parki
                             text = "${parking.prix}DA",
                             fontSize = 20.sp,
                             color = Color(0xFF7136ff),
+                            onTextLayout = {}
                         )
                         Spacer(modifier = Modifier.width(2.dp))
                         Text(
                             text = "/hr",
                             fontSize = 15.sp,
                             color = Color.Gray,
+                            onTextLayout = {}
                         )
                     }
                 }
@@ -303,7 +313,8 @@ fun ParkingDetails(id:Int?, navController: NavHostController,parkingModel: Parki
                     ),
                     onClick = { /*TODO*/ }
                 ) {
-                    Text(text = "Book now", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                    Text(text = "Book now", fontWeight = FontWeight.Bold, fontSize = 20.sp,
+                        onTextLayout = {})
                 }
 
 

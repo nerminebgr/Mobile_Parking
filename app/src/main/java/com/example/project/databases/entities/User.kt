@@ -10,6 +10,7 @@ data class User (
     var email:String,
     var password:String,
     var firstname:String,
-    var lastname:String
+    var lastname:String,
+    var token: String? = null,
 )
 
