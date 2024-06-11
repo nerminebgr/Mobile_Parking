@@ -22,6 +22,10 @@ class UserRepository(private val endpoint: Endpoint, private val userDao: UserDa
 
     fun getUsersByID(id:Int) =  userDao.getUsersByID(id)
 
+    suspend fun checkEmail(email: Map<String, String>) = endpoint.checkEmail(email)
+    suspend fun getUserByEmail(email: String) = endpoint.getUserByEmail(mapOf("email" to email))
+
+
     suspend fun generateToken(): String? {
         return try {
             val token = FirebaseMessaging.getInstance().token.await()

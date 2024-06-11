@@ -1,8 +1,10 @@
 package com.example.project.interfaces
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,9 +18,17 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -51,11 +61,78 @@ import kotlinx.coroutines.launch
 import java.net.URL
 import java.util.Date
 
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SearchBar(
+    searchQuery: String,
+    onSearchQueryChanged: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    TextField(
+        value = searchQuery,
+        onValueChange = onSearchQueryChanged,
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .background(Color(0xFFE8F0FE))
+            .border(
+                BorderStroke(1.dp, Color(0xFF4E4AF2)),
+                shape = RoundedCornerShape(16.dp)
+            ),
+        placeholder = { Text("Search parking...") },
+        leadingIcon = {
+            Icon(
+                imageVector = Icons.Default.Search,
+                contentDescription = null,
+                tint = Color(0xFF4E4AF2),
+                modifier = Modifier.size(24.dp)
+            )
+        },
+        trailingIcon = {
+            if (searchQuery.isNotEmpty()) {
+                IconButton(
+                    onClick = { onSearchQueryChanged("") }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Close,
+                        contentDescription = "Clear search",
+                        tint = Color(0xFF4E4AF2),
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
+            }
+        },
+        colors = TextFieldDefaults.colors(
+            focusedTextColor = Color.Black,
+            unfocusedTextColor = Color.Black,
+            focusedContainerColor = Color(0xFFE8F0FE),
+            unfocusedContainerColor = Color(0xFFE8F0FE),
+            cursorColor = Color.Black,
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            unfocusedLeadingIconColor = Color(0xFF4E4AF2),
+            unfocusedTrailingIconColor = Color(0xFF4E4AF2),
+            unfocusedPlaceholderColor = Color.Gray,
+            focusedPlaceholderColor = Color.Gray
+        ),
+        singleLine = true,
+        shape = RoundedCornerShape(16.dp)
+    )
+}
+
+
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun DisplayHome(navController: NavHostController, reservationModel: ResevationModel, parkingModel: ParkingModel, userModel: UserModel) {
 
     var user = userModel.authUser.value
+    val searchQuery = remember { mutableStateOf("") }
+    val parks = parkingModel.allParkings.value.filter {
+        it.nom.contains(searchQuery.value, ignoreCase = true) ||
+                it.adresse.contains(searchQuery.value, ignoreCase = true)
+    }
 
     LaunchedEffect(Unit){
         parkingModel.getAllParkings()
@@ -95,11 +172,16 @@ fun DisplayHome(navController: NavHostController, reservationModel: ResevationMo
 
         }
 
-        /*Row {
-            Text(text = "$parkings")
-        }*/
+        SearchBar(
+            searchQuery = searchQuery.value,
+            onSearchQueryChanged = { searchQuery.value = it },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        )
+
         LazyColumn {
-            items(parkingModel.allParkings.value) {
+            items(parks) {
                 Column(
                     modifier = Modifier
                         .clip(RoundedCornerShape(15.dp))

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Project</string>
+    <string name="client_id">816939922928-2ek6gi3qto8i106nmmau58br4iomgtne.apps.googleusercontent.com</string>
+    <string name="preference_file_key">AIzaSyCP70r3ldU2IuWWC0UlrUuCqoqba_QaXA0</string>
 </resources>

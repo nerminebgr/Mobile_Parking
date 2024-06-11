@@ -3,7 +3,10 @@ package com.example.project.databases
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
+import com.example.project.databases.DataClasses.ReservationDetails
+import com.example.project.databases.DataClasses.ReservationWithDetails
 import com.example.project.databases.entities.Reservation
 import java.util.Date
 
@@ -32,6 +35,10 @@ interface ReservationDao {
     fun addReservation(vararg reservation: Reservation)
     @Update
     fun updateParking(reservation: Reservation)
+
+    @Transaction
+    @Query("SELECT * FROM reservations WHERE id = :reservationId")
+    fun getReservationWithDetails(reservationId: Int): ReservationWithDetails
 
 
 }

@@ -16,6 +16,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface Endpoint {
 
@@ -45,6 +46,12 @@ interface Endpoint {
 
     @GET("/notif/send-notifications/")
     suspend fun getNotification(): Response<NotificationResponse>
+
+    @POST("auth/checkemail/")
+    suspend fun checkEmail(@Body email: Map<String, String>): Response<Map<String, Boolean>>
+    @POST("auth/getuserbyemail/")
+    suspend fun getUserByEmail(@Body email: Map<String, String>): Response<User>
+
 
     companion object {
         var endpoint: Endpoint? = null

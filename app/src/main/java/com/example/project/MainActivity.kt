@@ -11,6 +11,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -28,6 +29,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.auth.pages.LocationScreen
+//import com.example.auth.pages.MapScreen
 
 import com.example.project.databases.AppDatabase
 import com.example.project.databases.ParkingDao
@@ -114,15 +117,10 @@ fun BottomNavScreen(navController: NavHostController, reservationModel: Resevati
                             onClick = { navController.navigate(DestinationPath.Home.route) }
                         )
                         NavigationBarItem(
-                            icon = {
-                                Icon(
-                                    Icons.Default.AccountCircle,
-                                    contentDescription = "Login"
-                                )
-                            },
-                            label = { Text("Login") },
-                            selected = currentRoute == DestinationPath.SignIn.route,
-                            onClick = { navController.navigate(DestinationPath.SignIn.route) }
+                            icon = { Icon(Icons.Default.LocationOn, contentDescription = "Map") },
+                            label = { Text("map") },
+                            selected = currentRoute == DestinationPath.Map.route,
+                            onClick = { navController.navigate(DestinationPath.Map.route) }
                         )
                         NavigationBarItem(
                             icon = {
@@ -147,6 +145,7 @@ fun BottomNavScreen(navController: NavHostController, reservationModel: Resevati
                 composable(DestinationPath.SignIn.route) { DisplaySignIn(navController = navController,userModel) }
                 composable(DestinationPath.SignUp.route) { DisplaySignUP(navController,userModel) }
                 composable(DestinationPath.Splash.route) { SplashScreen(navController)}
+                composable(DestinationPath.Map.route) { LocationScreen(parkingModel, navController)}
                 composable(DestinationPath.ParkingDetails.route) {navBack->
                     val id = navBack.arguments?.getString("parkingId")?.toInt()
                     ParkingDetails(id,navController,parkingModel,userModel)
@@ -157,7 +156,8 @@ fun BottomNavScreen(navController: NavHostController, reservationModel: Resevati
                 }
                 composable(DestinationPath.ConfirmReservation.route) {navBack->
                     val id = navBack.arguments?.getString("id")?.toInt()
-                    ConfirmReservation(id,navController,reservationModel)
+                    val local = navBack.arguments?.getString("local")?.toInt()
+                    ConfirmReservation(local,id,navController,reservationModel)
                 }
                 composable(DestinationPath.Reservations.route) {
                     if (userModel.isLoggedIn.value) {

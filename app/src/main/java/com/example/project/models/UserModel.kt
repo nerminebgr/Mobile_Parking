@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavHostController
 import com.example.project.databases.DataClasses.Credentials
 import com.example.project.databases.DataClasses.RegisterRequest
 import com.example.project.databases.DataClasses.TokenRequest
@@ -18,7 +19,7 @@ import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
 
-class UserModel(private val userRepository: UserRepository): ViewModel() {
+class UserModel( private val userRepository: UserRepository): ViewModel() {
 
     var allUsers = mutableStateOf(listOf<User>())
     var users = mutableStateOf(listOf<User>())
@@ -123,6 +124,47 @@ class UserModel(private val userRepository: UserRepository): ViewModel() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 userRepository.addUser(user)
+            }
+        }
+    }
+
+    suspend fun checkEmail(email: String): Boolean {
+        val response = userRepository.checkEmail(mapOf("email" to email))
+        return if (response.isSuccessful) {
+            Log.v("checkV","success")
+            response.body()?.get("exists") ?: false
+        } else {
+            Log.v("checkV","false")
+            false
+        }
+    }
+
+    fun getUserByEmail(email: String) {
+        loading.value = true
+        error.value = false
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                val response = userRepository.getUserByEmail(email)
+                loading.value = false
+
+                if (response.isSuccessful) {
+                    Log.v("byEmail","successful")
+                    val responseBody = response.body()
+                    if (responseBody != null) {
+                        // Update the authUser
+                        authUser.value = responseBody
+                        isLoggedIn.value = true
+                        CoroutineScope(Dispatchers.IO).launch {
+                            if(userRepository.getUsersByID(responseBody.id)==null) {
+                                userRepository.addUser(responseBody)
+                            }
+
+                        }
+                    }
+                } else {
+                    Log.v("byEmail","not success")
+                    error.value = true
+                }
             }
         }
     }

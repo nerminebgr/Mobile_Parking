@@ -214,8 +214,7 @@ fun ReservationForm(
                         heure_entree = selectedStartTimeText,
                         heure_sortie = selectedEndTimeText
                     )
-                    reservationModel.addReservation(res)
-                    navController.navigate(DestinationPath.ConfirmReservation.getRoute(id))
+                    reservationModel.addReservation(res,navController)
                 }
             }
         ) {

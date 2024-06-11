@@ -61,15 +61,16 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
-    implementation ("androidx.navigation:navigation-compose:2.6.0")
+    implementation ("androidx.navigation:navigation-compose:2.7.7")
     implementation("androidx.test:monitor:1.6.1")
     implementation("com.google.firebase:firebase-messaging-ktx:24.0.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("com.google.android.gms:play-services-location:21.2.0")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation(platform("androidx.compose:compose-bom:2023.08.00"))
+    //androidTestImplementation(platform("androidx.compose:compose-bom:2023.08.00"))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
@@ -82,7 +83,7 @@ dependencies {
     //Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.6.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.6.0")
-    implementation ("com.google.code.gson:gson:2.8.5")
+    implementation ("com.google.code.gson:gson:2.8.8")
     // Coil
     implementation("io.coil-kt:coil-compose:2.4.0")
     //Coroutine tests
@@ -96,6 +97,17 @@ dependencies {
     implementation ("com.google.firebase:firebase-messaging:24.0.0")
     implementation ("com.github.androidmads:QRGenerator:1.0.0")
     implementation("com.google.zxing:core:3.4.1")
+
+    // Map
+    //implementation("com.google.maps.android:maps-compose:4.3.3")
+    implementation ("com.google.android.gms:play-services-maps:18.1.0")
+    implementation("com.google.maps.android:maps-compose:4.4.1")
+    implementation ("com.google.accompanist:accompanist-permissions:0.31.3-beta")
+    implementation ("com.google.android.gms:play-services-location:21.0.1")
+
+    // Auth
+    implementation("com.google.firebase:firebase-auth:23.0.0")
+    implementation ("com.google.android.gms:play-services-auth:16.0.0")
 
 
 }

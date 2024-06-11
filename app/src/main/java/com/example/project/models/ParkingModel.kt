@@ -41,31 +41,38 @@ class ParkingModel(private val parkingRepository: ParkingRepository): ViewModel(
             loading.value = true
             error.value = false
             viewModelScope.launch {
-                withContext(Dispatchers.IO) {
+                try {
+                    withContext(Dispatchers.IO) {
 
-                    val response = parkingRepository.getAllParkings()
-                    loading.value = false
+                        val response = parkingRepository.getAllParkings()
+                        loading.value = false
 
-                    if(response.isSuccessful){
+                        if (response.isSuccessful) {
 
-                        val list = response.body()
-                        if(list!=null){
+                            val list = response.body()
+                            if (list != null) {
 
-                            list.forEach { parking ->
-                                CoroutineScope(Dispatchers.IO).launch {
-                                // Perform your desired operation for each item
-                                    parkingRepository.addParking(parking)
+                                list.forEach { parking ->
+                                    CoroutineScope(Dispatchers.IO).launch {
+                                        // Perform your desired operation for each item
+                                        parkingRepository.addParking(parking)
+                                    }
                                 }
+                                allParkings.value = list
                             }
-                            allParkings.value = list
-                        }
 
+                        } else {
+                            error.value = true
+                        }
                     }
-                    else {
-                        error.value = true
-                    }
+                }catch (e: Exception) {  // Handle network error or any other exception
+                    loading.value = false
+                    error.value = true
+                    // You can show an error message or handle the exception as per your requirement
                 }
             }
+
+
         }
     }
 

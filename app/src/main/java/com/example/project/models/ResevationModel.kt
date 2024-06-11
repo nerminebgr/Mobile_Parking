@@ -5,10 +5,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavHostController
 import com.example.project.databases.DataClasses.Credentials
 import com.example.project.databases.DataClasses.ReservationDetails
 import com.example.project.databases.entities.Parking
 import com.example.project.databases.entities.Reservation
+import com.example.project.interfaces.DestinationPath
 import com.example.project.repositories.ParkingRepository
 import com.example.project.repositories.ReservationRepository
 import kotlinx.coroutines.CoroutineScope
@@ -32,13 +34,14 @@ class ResevationModel (private val reservationRepository: ReservationRepository)
     init {
         // Schedule the task to run every 1 minute
         // timer.scheduleAtFixedRate(notificationTask, 0, 60000)
-        timer.scheduleAtFixedRate(notificationTask, 0, 1800000)// 30 minutes
+        timer.scheduleAtFixedRate(notificationTask, 0, 1800000)//1800000= 30 minutes
     }
 
     var loading = mutableStateOf(false)
     var error = mutableStateOf(false)
     var allUserReservations = mutableStateOf(listOf<Reservation>())
     var currentReservation = mutableStateOf<ReservationDetails?>(null)
+    var id=mutableStateOf(1)
 
 
     /*fun getAllUserReservations(userID:Int) {
@@ -59,6 +62,7 @@ class ResevationModel (private val reservationRepository: ReservationRepository)
             } else {
                 getAllReservationsLocal(userID)
             }
+            //getAllReservationsRemote(userID)
         }
     }
     fun getAllReservationsLocal(userID:Int){
@@ -116,32 +120,37 @@ class ResevationModel (private val reservationRepository: ReservationRepository)
         }
 
     }
-    fun getReservationDetails(id: Int) {
+    fun getReservationDetails(id: Int,local:Int) {
         loading.value = true
         error.value = false
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
+                if(local==0){
+                    val response = reservationRepository.getReservationDetails(id)
+                    loading.value = false
 
-                val response = reservationRepository.getReservationDetails(id)
-                loading.value = false
+                    if(response.isSuccessful){
+                        val responseBody  = response.body()
+                        if(responseBody !=null){
 
-                if(response.isSuccessful){
-                    val responseBody  = response.body()
-                    if(responseBody !=null){
+                            currentReservation.value = responseBody
 
-                        currentReservation.value = responseBody
-
+                        }
+                    }
+                    else {
+                        error.value = true
                     }
                 }
-                else {
-                    error.value = true
+                else { // local
+                    currentReservation.value = reservationRepository.getReservationDetailsById(id)
                 }
+
             }
         }
     }
 
 
-    fun addReservation(reservation: Reservation) {
+    fun addReservation(reservation: Reservation, navController: NavHostController) {
         loading.value = true
         error.value = false
         viewModelScope.launch {
@@ -155,6 +164,11 @@ class ResevationModel (private val reservationRepository: ReservationRepository)
                     if(responseBody !=null){
                         CoroutineScope(Dispatchers.IO).launch {
                             addLocalReservation(reservation)
+                            id.value = responseBody.id
+                            Log.v("id resercationnnnn = ",id.value.toString())
+                            withContext(Dispatchers.Main) {
+                                navController.navigate(DestinationPath.ConfirmReservation.getRoute(0,id.value))
+                            }
                         }
                         //val responseMessage: String? = responseBody["message"]
                         //if(responseMessage!=null) message.value = responseMessage

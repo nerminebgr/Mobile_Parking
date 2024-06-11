@@ -3,6 +3,7 @@ package com.example.project.interfaces
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -57,13 +58,13 @@ import com.example.project.models.UserModel
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "SuspiciousIndentation")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ConfirmReservation( id: Int?,navController: NavHostController, reservationModel: ResevationModel){
+fun ConfirmReservation(local:Int?, id: Int?,navController: NavHostController, reservationModel: ResevationModel){
 
     val context = LocalContext.current
 
     LaunchedEffect(Unit){
-        if(id!=null){
-            reservationModel.getReservationDetails(id)
+        if(id!=null && local!=null){
+            reservationModel.getReservationDetails(id,local)
         }
 
     }
@@ -145,7 +146,7 @@ fun ConfirmReservation( id: Int?,navController: NavHostController, reservationMo
                 Row(
 
                 ){
-
+                    Log.v("Date = ",details?.date_entree.toString())
                     Text(
                         text = "Date: ",
                         color = Color.Gray,

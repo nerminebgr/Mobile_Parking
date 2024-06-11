@@ -7,6 +7,7 @@ sealed class DestinationPath(val route : String) {
     object Splash:DestinationPath("splash")
 
     object Reservations: Destination("reservations/{userId}")
+    object Map: Destination("map")
 
     object ParkingDetails:DestinationPath("parking_details/{parkingId}"){
         fun getRoute (id:Int) = "parking_details/$id"
@@ -16,7 +17,7 @@ sealed class DestinationPath(val route : String) {
         fun getRoute (id:Int) = "reservationForm/$id"
     }
 
-    object ConfirmReservation:DestinationPath("ConfirmReservation/{id}"){
-        fun getRoute (id:Int) = "ConfirmReservation/$id"
+    object ConfirmReservation:DestinationPath("ConfirmReservation/{id}/{local}"){
+        fun getRoute (local:Int,id:Int) = "ConfirmReservation/$id/$local"
     }
 }
